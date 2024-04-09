@@ -22,7 +22,7 @@ data_sell = {
 }
 son = 0
 while True:
-    sorov = input("Add product -->1\nSell product -->2\nReport -->3\n>>>")
+    sorov = input("Add product -->1\nSell product -->2\nReport data-->3\nReport date -->4\nExit -->stop\n>>>")
 
     # add Product
     if sorov == '1':
@@ -30,7 +30,7 @@ while True:
             name = input('Product name: ').upper()
             if name in data['name']:                
                 index = data['name'].index(name)
-                print(f'Ushbu mahsulotdan skladda {data['qty'][index]} ta mavjud')
+                print(f"Ushbu mahsulotdan skladda {data['qty'][index]} ta mavjud")
                 qty = input('Yana nechta mahsulot qushmoqchisiz: ')
                 price = input('Product price: ')
                 data['qty'][index] = int(data['qty'][index]) + int(qty)
@@ -68,33 +68,44 @@ while True:
         count = 0
         while True:
             stuff = input('Product name: ').upper()
-            quantity = int(input('Input qty of product: '))
-            for i in range(len(data.get('name'))):
-                if (stuff == data.get('name')[i] and quantity <= int(data.get('qty')[i])):
-                    Summa += (quantity * int(data.get('price')[i]))
-                    count += quantity
+            if stuff in data['name']:
+                index = data['name'].index(stuff)
+                qty = int(input('Product quantity: '))
+                if qty <= int(data['qty'][index]):
+                    Summa += (qty * int(data['price'][index]))
+                    count += qty
 
                     data_sell['name'].append(stuff)
-                    data_sell['price'].append(data.get('price')[i])
-                    data_sell['qty'].append(quantity)
+                    data_sell['qty'].append(qty)
+                    data_sell['price'].append(data['price'][index])
                     data_sell['date'].append(datetime.datetime.now())
-
-                    opros = input('Savatga yana mahsulot qushishni xoxlasangiz -->1\nChiqish uchun -->2\n>>>')
+                    opros = input('Yana mahsulot olish uchun-->1\nChiqish uchun -->2\n>>>')
                     if opros == '1':
                         continue
                     else:
                         print('Sizning savatingizda jami:')
+                        print('------------------------------------')
                         for i in range(len(data_sell['name'])):
-                            print(f"{data_sell.get('qty')[i]} ta {data_sell.get('name')[i]} mavjud har biri {data_sell.get('price')[i]} somdan ")
+                            print(f"{data_sell.get('name')[i]}  - {data_sell.get('qty')[i]} x {data_sell.get('price')[i]} som")
                         print(f"""Xaridingiz umumiy miqdori {Summa} som
                                 QQS bilan {int(Summa * 1.12)} som
                                 --------------------------------------
                                  Umumiy narx: {int(Summa * 1.12)}""")
-                        # break
+                        break
                 else:
-                    print('Sklada bu mahsulot yoki yetarlicha qiymatda mavjud emas')
-                    break
-            break
+                    print(f"Skladda {data['qty'][index]} ta {data['name'][index]} mavjud")
+                    print('------------------------------')
+                    opros = input('Kamroq qiymat kiritish uchun -->1\nChiqish uchun -->2\n>>>')
+                    if opros == '1':
+                        continue
+                    else:
+                        break
+            else:
+                print('Ushbu mahsulot skladda mavjud emas')
+                print('--------------------------------')
+                break
+
+
     # Report
     elif sorov == '3':
         while True:
