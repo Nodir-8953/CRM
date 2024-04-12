@@ -1,4 +1,6 @@
 import datetime
+import qrcode
+
 def data_func():
     global data, data_add, data_sell
     data = {'name': [],
@@ -70,12 +72,22 @@ def sell_product():
                 else:
                     print('Sotilgan tovarlar jami:')
                     print('------------------------------------')
+                    
                     for i in range(len(data_sell['name'])):
                         print(f"{data_sell.get('name')[i]}  - {data_sell.get('qty')[i]} x {data_sell.get('price')[i]} som")
                     print(f"""Tovarlarning umumiy miqdori {Summa} som
                                 QQS bilan {int(Summa * 1.12)} som
                                 --------------------------------------
                                  Umumiy narx: {int(Summa * 1.12)}""")
+                    img = qrcode.make(
+                        # f"{data_sell.get('name')[i]}  - {data_sell.get('qty')[i]} x {data_sell.get('price')[i]} som"
+                        f"""Tovarlarning umumiy miqdori {Summa} som
+                                QQS bilan {int(Summa * 1.12)} som
+                                --------------------------------------
+                                 Umumiy narx: {int(Summa * 1.12)}"""
+                    )
+                    type(img)  # qrcode.image.pil.PilImage
+                    img.save("some_file.png")
                     main()
             else:
                 print(f"Skladda {data['qty'][index]} ta {data['name'][index]} mavjud")
