@@ -3,7 +3,7 @@ data = {
     'name': ['OLMA', 'ANOR'],
     'price': ['20000', '35000'],
     'qty': ['20', '30'],
-    'date': ['2024-04-04 16:30:23.860902', '2024-04-03 11:15:23.860902']
+    'date': ['04.04.24', '03.04.24']
 }
 
 data_add = {
@@ -22,7 +22,7 @@ data_sell = {
 }
 son = 0
 while True:
-    sorov = input("Add product -->1\nSell product -->2\nReport data-->3\nReport date -->4\nExit -->stop\n>>>")
+    sorov = input("Add product -->1\nSell product -->2\nReport data-->3\nExit -->stop\n>>>")
 
     # add Product
     if sorov == '1':
@@ -34,12 +34,12 @@ while True:
                 qty = input('Yana nechta mahsulot qushmoqchisiz: ')
                 price = input('Product price: ')
                 data['qty'][index] = int(data['qty'][index]) + int(qty)
-                data['date'][index] = datetime.datetime.now()
+                data['date'][index] = datetime.datetime.now().strftime("%d.%m.%y")
                 data['price'][index] = int(price)
                 data_add['name'].append(name)
                 data_add['price'].append(price)
                 data_add['qty'].append(qty)
-                data_add['date'].append(datetime.datetime.now())
+                data_add['date'].append(datetime.datetime.now().strftime("%d.%m.%y"))
                 finish = input('Add product again -->1\nExit to list of functions --2\n>>>')
                 if finish == '1':
                     continue
@@ -51,11 +51,11 @@ while True:
                 data['name'].append(name)
                 data['price'].append(price)
                 data['qty'].append(qty)
-                data['date'].append(datetime.datetime.now())
+                data['date'].append(datetime.datetime.now().strftime("%d.%m.%y"))
                 data_add['name'].append(name)
                 data_add['price'].append(price)
                 data_add['qty'].append(qty)
-                data_add['date'].append(datetime.datetime.now())
+                data_add['date'].append(datetime.datetime.now().strftime("%d.%m.%y"))
                 finish = input('Add product again -->1\nExit to list of functions --2\n>>>')
                 if finish == '1':
                     continue
@@ -78,7 +78,7 @@ while True:
                     data_sell['name'].append(stuff)
                     data_sell['qty'].append(qty)
                     data_sell['price'].append(data['price'][index])
-                    data_sell['date'].append(datetime.datetime.now())
+                    data_sell['date'].append(datetime.datetime.now().strftime("%d.%m.%y"))
                     opros = input('Yana mahsulot olish uchun-->1\nChiqish uchun -->2\n>>>')
                     if opros == '1':
                         continue
@@ -135,23 +135,73 @@ while True:
                 break
 
             # sell data
-            elif sorov_report == '3':
-                for i in range(len(data_sell.get('name'))):
-                    son += 1
-                    print(f"""
-                        Name: {data_sell.get('name')[i]}
-                        Price: {data_sell.get('price')[i]}
-                        Quantity: {data_sell.get('qty')[i]}
-                        Time: {data_sell.get('date')[i]}              
-                           """)
-                break
+            # elif sorov_report == '3':
+            #     for i in range(len(data_sell.get('name'))):
+            #         son += 1
+            #         print(f"""
+            #             Name: {data_sell.get('name')[i]}
+            #             Price: {data_sell.get('price')[i]}
+            #             Quantity: {data_sell.get('qty')[i]}
+            #             Time: {data_sell.get('date')[i]}              
+            #                """)
+            #     break
 
-            # exit while
-            elif sorov_report == '4':
+            # report date
+            elif sorov_report == '3':
+                # print('salom')
+                while True:
+                    sorov = input('Umumiy sotilgan tovarlar ruyxati -->1\nQaysidir kuni sotilgan tovarlar ruyxati -->2\nAprel oyida sotilgan tovarlar ruyxati -->3\nExit -->4\n>>>')
+                    if sorov == '1':
+                        for i in range(len(data_sell.get('name'))):
+                            son += 1
+                            print(f"""
+                                Name: {data_sell.get('name')[i]}
+                                Price: {data_sell.get('price')[i]}
+                                Quantity: {data_sell.get('qty')[i]}
+                                Time: {data_sell.get('date')[i]}              
+                                """)
+                        # break
+                    elif sorov == '2':
+                        while True:
+                            date = input("Vaqtni kiriting (format day.month.year): ")
+                            if (len(date.split('.')) == 3 and 1 <= int(date.split('.')[0]) <= 31 and 1 <= int(date.split('.')[1]) <= 12 and 20 <= int(date.split('.')[2]) <= 24):
+                                
+                                if date in data_sell['date']:
+                                    # i = data_sell['date'].index(date)
+                                    for i in range(len(data_sell['name'])):
+                                        print(f"{data_sell.get('name')[i]}  - {data_sell.get('qty')[i]} x {data_sell.get('price')[i]} som")
+                                    print(f"""Sotuvning umumiy miqdori {Summa} som
+                                            QQS bilan {int(Summa * 1.12)} som
+                                            --------------------------------------
+                                            Umumiy Summa: {int(Summa * 1.12)}""")
+                                    break
+                                else:
+                                    print('Shu kuni mahsulot sotilmagan!!!')
+                                    print('--------------------------------')
+                                    break
+                            else:
+                                print('Vaqtni tugri formatda kiriting!!!!')
+                    elif sorov == '3':
+                        Summ = 0
+                        while True:
+                            for i, ter in enumerate(data_sell['date']):
+                                if data_sell['date'][i].split('.')[1] == '04':
+                                    Summ += (qty * int(data['price'][i]))
+                                    # print(data_sell['name'][i])
+                                    print(f"{data_sell.get('name')[i]}  - {data_sell.get('qty')[i]} x {data_sell.get('price')[i]} som")
+                            print(f"""Sotuvning umumiy miqdori {Summa} som
+                                            QQS bilan {int(Summ * 1.12)} som
+                                            --------------------------------------
+                                            Umumiy Summa: {int(Summ * 1.12)}""")
+                            break
+                    elif sorov == "4":
+                        break
+                    else:
+                        continue
+            elif sorov_report == "4":
                 break
             else:
-                continue
-
+                continue 
     # Stop programm
     elif sorov == "stop":
         break
